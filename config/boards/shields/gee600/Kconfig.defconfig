@@ -1,0 +1,13 @@
+if SHIELD_JEE600
+
+config ZMK_KEYBOARD_NAME
+	default "jee600"
+
+config SSD1306
+	default y
+
+config SSD1306_REVERSE_MODE
+    bool
+	default n
+	
+endif

@@ -1,0 +1,150 @@
+/*
+ * Copyright (c) 2024 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+//================================================================================
+//
+//				           	V-		USB		V+				
+//	            D1	 P0.06	PD3				RAW	 			
+//	            D0	 P0.08	PD2	L1		 L2	GND	 				
+//							GND				RST					
+//	encoder1_3				GND				VCC	 P0.13+				
+//	            D2   P0.17	PD1  Nice!Nano	PF4	 P0.31	 D21		ROW 0
+//	            D3   P0.20	PD0  v2 clone	PF5	 P0.29	 D20		COL 0
+//	MOSI/MISO   D4	 P0.22	PD4  (top view)	PF6	 P0.02	 D19		COL 1
+//	SCK         D5	 P0.24	PC6				PF7	 P1.15	 D18
+//	CS          D6	 P1.00	PD7				PB1	 P1.13	 D15
+//	MOT         D7	 P0.11	PE6				PB3	 P1.11	 D14
+//	encoder1_1  D8	 P1.04	PB4	O O O		PB2	 P0.10	 D16	
+//	encoder1_2  D9	 P1.06	PB5	| | |		PB6	 P0.09	 D10
+//								| | |
+//					 P1.01	____| | |	&gpio1 1		
+//					 P1.02	______| |	&gpio1 2
+//					 P1.07	________|	&gpio1 7
+//	L1 (LED1)		 P0.15
+//	L2 (LED2)	     charging
+//	SET HIGH TO OFF  P0.13+
+//
+// According to: https://www.reddit.com/r/olkb/comments/17w0opn/nicenano_pinout/
+// MOSI, SCK must be on high-frequency pins (D1-D7), while CS may be on any pin
+//
+//	   PWM3610 Module 20240425
+//     https://www.aliexpress.com/item/1005006913778101.html
+//
+//                             
+//                         , - + + + - ,
+//                     , '       o       ' ,
+//                   ,        +-----+        ,
+//                  ,SDIO-O   | PWM |         ,      A - VDDIO     
+//                 , SCLK-O   | 361 |     A B  ,     B - GND
+//                 ,  NCS-O   | 0DM |     C D  ,     C - VDD	(1.7 - 6V input)
+//                 , NRES-O   | SUD |          ,     D - GND
+//                  , MOT-O   |  U  |         ,
+//                   ,        +-----+        ,
+//                     ,         o        , '
+//                       ' - , _ _ _ ,  '
+//
+// According to https://www.reddit.com/r/ErgoMechKeyboards/comments/1h0zy8n/help_which_nicenane_pins_to_connect_to_this/
+//	SDIO - main IO pin (MOSI/MISO)
+//  SCLK - SCK
+//  NCS  - cs-gpios
+//  MOT  - irq-gpios
+//
+//================================================================================
+
+#include <dt-bindings/zmk/matrix_transform.h>
+
+#define INPUT_EV_KEY 0x01               /**< Key event */
+#define INPUT_EV_REL 0x02               /**< Relative coordinate event */
+#define INPUT_EV_ABS 0x03               /**< Absolute coordinate event */
+#define INPUT_EV_MSC 0x04               /**< Miscellaneous event */
+#define INPUT_EV_VENDOR_START 0xf0      /**< Vendor specific event start */
+#define INPUT_EV_VENDOR_STOP 0xff       /**< Vendor specific event stop */
+
+#define INPUT_REL_X 0x00                /**< Relative X coordinate */
+#define INPUT_REL_Y 0x01                /**< Relative Y coordinate */
+#define INPUT_REL_WHEEL 0x08            /**< Relative wheel coordinate */
+#define INPUT_REL_HWHEEL 0x06           /**< Relative horizontal wheel coordinate */
+#define INPUT_REL_MISC 0x09             /**< Relative misc coordinate */
+
+/ {
+	chosen {
+		zmk,kscan = &kscan;
+		zmk,matrix_transform = &transform;
+	};
+	
+	kscan: kscan {
+		compatible = "zmk,kscan-gpio-matrix";
+		label = "KSCAN";
+		diode-direction = "col2row";
+		wakeup-source;
+		
+		row-gpios = <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+		
+		col-gpios = <&pro_micro 20 GPIO_ACTIVE_HIGH>,
+					<&pro_micro 19 GPIO_ACTIVE_HIGH>;
+		
+		// example: <&gpio1      2 GPIO_ACTIVE_HIGH>,
+	};
+	
+	encoder_1: encoder_1 {
+		compatible = "alps,ec11";
+		a-gpios = <&pro_micro 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+		b-gpios = <&pro_micro 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+		steps = <20>;
+		status = "okay";
+	};
+	
+	transform: matrix_transform {
+		compatible = "zmk,matrix-transform";
+		rows = <1>;
+		columns = <2>;
+		
+		map = <
+				RC(0, 0) RC(0, 1)
+		>;
+	};
+	
+	trackball_listener {
+		compatible = "zmk,input-listener";
+		device = <&trackball>;
+	};	
+};
+
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK,  0, 24)>,
+					<NRF_PSEL(SPIM_MOSI, 0, 22)>,
+					<NRF_PSEL(SPIM_MISO, 0, 22)>;
+        };
+    };
+
+    spi0_sleep: spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK,  0, 24)>,
+					<NRF_PSEL(SPIM_MOSI, 0, 22)>,
+					<NRF_PSEL(SPIM_MISO, 0, 22)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi0 {
+    status = "okay";
+    compatible = "nordic,nrf-spim";
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-1 = <&spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio1 00 GPIO_ACTIVE_LOW>; // chip select (CS)
+
+    trackball: trackball@0 {
+        status = "okay";
+        compatible = "pixart,pmw3610";
+        reg = <0>;
+        spi-max-frequency = <2000000>;
+        irq-gpios = <&gpio0 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+    };
+};

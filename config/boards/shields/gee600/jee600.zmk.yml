@@ -1,0 +1,9 @@
+file_format: "1"
+id: jee600
+name: Jee600
+type: shield
+url: https://github.com/thisgradi/zmk-config-concave60
+requires: [pro_micro]
+features:
+  - keys
+  - pointer
