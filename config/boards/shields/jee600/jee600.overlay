@@ -14,7 +14,7 @@
 //	            D2   P0.17	PD1  Nice!Nano	PF4	 P0.31	 D21		ROW 0
 //	            D3   P0.20	PD0  v2 clone	PF5	 P0.29	 D20		COL 0
 //	MOSI/MISO   D4	 P0.22	PD4  (top view)	PF6	 P0.02	 D19		COL 1
-//	SCK         D5	 P0.24	PC6				PF7	 P1.15	 D18
+//	SCK         D5	 P0.24	PC6				PF7	 P1.15	 D18		COL 2
 //	CS          D6	 P1.00	PD7				PB1	 P1.13	 D15
 //	MOT         D7	 P0.11	PE6				PB3	 P1.11	 D14
 //	encoder1_1  D8	 P1.04	PB4	O O O		PB2	 P0.10	 D16	
@@ -84,7 +84,8 @@
 		row-gpios = <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
 		
 		col-gpios = <&pro_micro 20 GPIO_ACTIVE_HIGH>,
-					<&pro_micro 19 GPIO_ACTIVE_HIGH>;
+					<&pro_micro 19 GPIO_ACTIVE_HIGH>,
+					<&pro_micro 18 GPIO_ACTIVE_HIGH>;
 		
 		// example: <&gpio1      2 GPIO_ACTIVE_HIGH>,
 	};
@@ -100,10 +101,10 @@
 	transform: matrix_transform {
 		compatible = "zmk,matrix-transform";
 		rows = <1>;
-		columns = <2>;
+		columns = <3>;
 		
 		map = <
-				RC(0, 0) RC(0, 1)
+				RC(0, 0) RC(0, 1) RC(0, 2)
 		>;
 	};
 	

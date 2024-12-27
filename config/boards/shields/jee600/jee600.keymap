@@ -6,8 +6,22 @@
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
 
+#define ZMK_MOUSE_SCRL_VAL 140
+
 / {
 	//macros {};
+	
+	behaviors {
+		
+		//check out: https://github.com/JinRecords/zmk-config-Jin/blob/0b1e0ffeb5dc6cd7ae6410aac087a3aaecf1e21d/config/mouse.dtsi
+		
+		inc_dec_msc: behavior_sensor_rotate_mouse_wheel {
+			compatible = "zmk,behavior-sensor-rotate-var";
+			#sensor-binding-cells = <2>;
+			bindings = <&msc>, <&msc>;
+			tap-ms = <20>;
+		};
+	};
 	
 	sensors: sensors {
 		compatible = "zmk,keymap-sensors";
@@ -27,12 +41,15 @@
 		
 		default_layer {
 			bindings = <
-				&mkp LCLK		&mkp RCLK
+				&mkp LCLK		&mkp RCLK		&bt BT_CLR
 			>;
-			sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+			sensor-bindings = <&inc_dec_msc SCRL_UP SCRL_DOWN>;
 		};
-		
-
-		
 	};
+};
+
+&msc {
+	acceleration-exponent = <3>;
+	time-to-max-speed-ms = <0>;
+	delay-ms = <0>;
 };
