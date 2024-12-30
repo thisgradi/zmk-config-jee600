@@ -32,16 +32,15 @@
 	keymap {
 		compatible = "zmk,keymap";
 
-		/* DEFAULT
-		 * ┏━━━━━━━━━┳━━━━━━━━━┓
-		 * ┃  LCLK   ┃  RCLK   ┃
-		 * ┣━━━━━━━━━╋━━━━━━━━━┫
-		 * ┗━━━━━━━━━┻━━━━━━━━━┛
-		*/
-		
 		default_layer {
+			// DEFAULT (0)
+			// ┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+			// ┃  LCLK   ┃  MCLK   ┃  RCLK   ┃ LAYER 1 ┃
+			// ┣━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━┫
+			// ┗━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┛
+			//
 			bindings = <
-				&mkp LCLK		&mkp RCLK		&bt BT_CLR
+				&mkp LCLK		&mkp MCLK		&mkp RCLK		&bt BT_CLR
 			>;
 			sensor-bindings = <&inc_dec_msc SCRL_UP SCRL_DOWN>;
 		};

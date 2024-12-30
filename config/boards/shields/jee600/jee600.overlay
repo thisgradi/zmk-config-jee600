@@ -15,7 +15,7 @@
 //              D3   P0.20  PD0   v2 clone  PF5  P0.29   D20        COL 0
 //  MOSI/MISO   D4   P0.22  PD4  (top view) PF6  P0.02   D19        COL 1
 //  SCK         D5   P0.24  PC6             PF7  P1.15   D18        COL 2
-//  CS          D6   P1.00  PD7             PB1  P1.13   D15        
+//  CS          D6   P1.00  PD7             PB1  P1.13   D15        COL 3
 //  MOT         D7   P0.11  PE6             PB3  P1.11   D14        
 //  encoder1_1  D8   P1.04  PB4    O O O    PB2  P0.10   D16        
 //  encoder1_2  D9   P1.06  PB5    | | |    PB6  P0.09   D10        
@@ -52,6 +52,20 @@
 //  NCS  - cs-gpios
 //  MOT  - irq-gpios
 //
+//
+//        Encoder (metal outer shell forward, clips backward)
+//
+//        _______
+//       |3332 2 |
+//      |33      2|
+//      |3   O    |
+//      |1       2|
+//      |__1_1_1__|
+//        |  |  |
+// GND ___|  |  |         constant
+// 1   ______|  |    D8   alternating
+// 2   _________|    D9   alternating
+//
 //================================================================================
 
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -85,7 +99,8 @@
 		
 		col-gpios = <&pro_micro 20 GPIO_ACTIVE_HIGH>,
 					<&pro_micro 19 GPIO_ACTIVE_HIGH>,
-					<&pro_micro 18 GPIO_ACTIVE_HIGH>;
+					<&pro_micro 18 GPIO_ACTIVE_HIGH>,
+					<&pro_micro 15 GPIO_ACTIVE_HIGH>;
 		
 		// example: <&gpio1      2 GPIO_ACTIVE_HIGH>,
 	};
@@ -101,10 +116,10 @@
 	transform: matrix_transform {
 		compatible = "zmk,matrix-transform";
 		rows = <1>;
-		columns = <3>;
+		columns = <4>;
 		
 		map = <
-				RC(0, 0) RC(0, 1) RC(0, 2)
+				RC(0, 0) RC(0, 1) RC(0, 2) RC(0, 3)
 		>;
 	};
 	
