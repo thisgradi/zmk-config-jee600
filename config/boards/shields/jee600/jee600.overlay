@@ -6,48 +6,48 @@
 
 //================================================================================
 //
-//				           	V-		USB		V+				
-//	            D1	 P0.06	PD3				RAW	 			
-//	            D0	 P0.08	PD2	L1		 L2	GND	 				
-//							GND				RST					
-//	encoder1_3				GND				VCC	 P0.13+				
-//	            D2   P0.17	PD1  Nice!Nano	PF4	 P0.31	 D21		ROW 0
-//	            D3   P0.20	PD0  v2 clone	PF5	 P0.29	 D20		COL 0
-//	MOSI/MISO   D4	 P0.22	PD4  (top view)	PF6	 P0.02	 D19		COL 1
-//	SCK         D5	 P0.24	PC6				PF7	 P1.15	 D18		COL 2
-//	CS          D6	 P1.00	PD7				PB1	 P1.13	 D15
-//	MOT         D7	 P0.11	PE6				PB3	 P1.11	 D14
-//	encoder1_1  D8	 P1.04	PB4	O O O		PB2	 P0.10	 D16	
-//	encoder1_2  D9	 P1.06	PB5	| | |		PB6	 P0.09	 D10
-//								| | |
-//					 P1.01	____| | |	&gpio1 1		
-//					 P1.02	______| |	&gpio1 2
-//					 P1.07	________|	&gpio1 7
-//	L1 (LED1)		 P0.15
-//	L2 (LED2)	     charging
-//	SET HIGH TO OFF  P0.13+
+//                           V-     USB     V+                      
+//              D1   P0.06  PD3             RAW                     
+//              D0   P0.08  PD2 L1       L2 GND                     
+//                          GND             RST                     
+//  encoder1_3              GND             VCC  P0.13+             
+//              D2   P0.17  PD1  Nice!Nano  PF4  P0.31   D21        ROW 0
+//              D3   P0.20  PD0   v2 clone  PF5  P0.29   D20        COL 0
+//  MOSI/MISO   D4   P0.22  PD4  (top view) PF6  P0.02   D19        COL 1
+//  SCK         D5   P0.24  PC6             PF7  P1.15   D18        COL 2
+//  CS          D6   P1.00  PD7             PB1  P1.13   D15        
+//  MOT         D7   P0.11  PE6             PB3  P1.11   D14        
+//  encoder1_1  D8   P1.04  PB4    O O O    PB2  P0.10   D16        
+//  encoder1_2  D9   P1.06  PB5    | | |    PB6  P0.09   D10        
+//                                 | | |                            
+//                   P1.01     ____| | |    &gpio1 1                
+//                   P1.02     ______| |    &gpio1 2                
+//                   P1.07     ________|    &gpio1 7                
+//  L1 (LED1)        P0.15                                          
+//  L2 (LED2)        charging                                       
+//  SET HIGH TO OFF  P0.13+                                         
 //
 // According to: https://www.reddit.com/r/olkb/comments/17w0opn/nicenano_pinout/
 // MOSI, SCK must be on high-frequency pins (D1-D7), while CS may be on any pin
 //
-//	   PWM3610 Module 20240425
+//     PWM3610 Module 20240425
 //     https://www.aliexpress.com/item/1005006913778101.html
 //
 //                             
 //                         , - + + + - ,
 //                     , '       o       ' ,
 //                   ,        +-----+        ,
-//                  ,SDIO-O   | PWM |         ,      A - VDDIO     
-//                 , SCLK-O   | 361 |     A B  ,     B - GND
-//                 ,  NCS-O   | 0DM |     C D  ,     C - VDD	(1.7 - 6V input)
-//                 , NRES-O   | SUD |          ,     D - GND
+//                  ,SDIO-O   | PWM |         ,      A - VDDIO  
+//                 , SCLK-O   | 361 |     A B  ,     B - GND    
+//                 ,  NCS-O   | 0DM |     C D  ,     C - VDD    (1.7 - 6V input)
+//                 , NRES-O   | SUD |          ,     D - GND    
 //                  , MOT-O   |  U  |         ,
 //                   ,        +-----+        ,
 //                     ,         o        , '
 //                       ' - , _ _ _ ,  '
 //
-// According to https://www.reddit.com/r/ErgoMechKeyboards/comments/1h0zy8n/help_which_nicenane_pins_to_connect_to_this/
-//	SDIO - main IO pin (MOSI/MISO)
+//  According to https://www.reddit.com/r/ErgoMechKeyboards/comments/1h0zy8n/help_which_nicenane_pins_to_connect_to_this/
+//  SDIO - main IO pin (MOSI/MISO)
 //  SCLK - SCK
 //  NCS  - cs-gpios
 //  MOT  - irq-gpios
