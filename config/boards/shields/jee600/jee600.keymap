@@ -29,19 +29,38 @@
 		triggers-per-rotation = <20>;
 	};
 	
+	// Column schematic as seen from outside:
+	//
+	//    5 4 3 2 1 0
+	//    ___________
+	// 0 |v w x A B C     v: RMB
+	// 1 |y D E F G H     w: MMB (button)
+	// 2 |I J K L M N     x: LMB
+	// 3 |z O P Q R S     y: MMB (wheel) (not implemented yet)
+	//                    z: _
+	
 	keymap {
 		compatible = "zmk,keymap";
 
 		default_layer {
 			// DEFAULT (0)
-			// ┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
-			// ┃  LCLK   ┃  MCLK   ┃  RCLK   ┃ LAYER 1 ┃
-			// ┣━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━┫
-			// ┗━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┛
 			//
-			bindings = <
-				&mkp LCLK		&mkp MCLK		&mkp RCLK		&bt BT_CLR
-			>;
+            // ┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+            // ┃  RCLK   ┃  MCLK   ┃  LCLK   ┃    A    ┃    B    ┃    C    ┃
+            // ┗━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━┫
+            //  not conn ┃    D    ┃    E    ┃    F    ┃    G    ┃  BT_CLR ┃
+            // ┏━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━┫
+            // ┃    I    ┃    J    ┃    K    ┃    L    ┃    M    ┃    N    ┃
+            // ┗━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━┫
+            //  not conn ┃    O    ┃    P    ┃    Q    ┃    R    ┃    S    ┃
+            //           ┗━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┛
+			//o
+            bindings = <
+                &mkp RCLK      &mkp MCLK      &mkp LCLK      &kp A      &kp B      &kp C
+                               &kp D          &kp E          &kp F      &kp G      &bt BT_CLR
+                &kp I          &kp J          &kp K          &kp L      &kp M      &kp N
+                               &kp O          &kp P          &kp Q      &kp R      &kp S
+            >;
 			sensor-bindings = <&inc_dec_msc SCRL_UP SCRL_DOWN>;
 		};
 	};
